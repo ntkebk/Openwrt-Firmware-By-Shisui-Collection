@@ -74,3 +74,23 @@ git clone https://github.com/MatJehey/autocore-arm-x86.git package/new/luci-app-
 # Bypass
 # 404 LINK git clone https://github.com/kiddin9/openwrt-bypass.git package/new/luci-app-bypass
 git clone https://github.com/hpqqph/openwrt-bypass.git package/new/luci-app-bypass
+
+# ------------------------------- Fix Conflicts (Fix Error 77 / C compiler cannot create executables) -------------------------------
+
+# Remove duplicate packages in main feeds to prioritize the new packages in 'package/new'
+# This prevents compilation failures for shadowsocksr-libev and v2ray-core
+rm -rf feeds/packages/net/shadowsocksr-libev
+rm -rf feeds/packages/net/v2ray-core
+rm -rf feeds/packages/net/v2ray-geoview
+rm -rf feeds/packages/net/v2ray-plugin
+rm -rf feeds/packages/net/v2ray-protos
+
+# Clean up redundant folders in 'package/new/small'
+rm -rf package/new/small/shadowsocksr-libev
+rm -rf package/new/small/v2ray*
+
+# Force update and re-install feeds to refresh the package database
+./scripts/feeds update -a
+./scripts/feeds install -a
+
+# ------------------------------- Fix Ends -------------------------------
