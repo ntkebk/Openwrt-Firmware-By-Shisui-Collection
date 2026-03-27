@@ -72,4 +72,5 @@ git clone https://github.com/kea/openwrt-php7-package.git package/new/php7
 git clone https://github.com/MatJehey/autocore-arm-x86.git package/new/luci-app-autocore
 
 # Bypass
-git clone https://github.com/kiddin9/openwrt-bypass.git package/new/luci-app-bypass
+# 404 LINK git clone https://github.com/kiddin9/openwrt-bypass.git package/new/luci-app-bypass
+git clone https://github.com/hpqqph/openwrt-bypass.git package/new/luci-app-bypass
