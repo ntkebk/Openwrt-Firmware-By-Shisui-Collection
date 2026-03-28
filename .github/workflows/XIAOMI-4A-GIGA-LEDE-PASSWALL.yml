@@ -49,17 +49,18 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+        
+        
     - name: Fix UPX Path for Xray-core
       run: |
         sudo apt-get update
         sudo apt-get install -y upx-ucl
-        # Ensure the staging directory for host binaries exists
-        mkdir -p staging_dir/host/bin
-        # Create a symbolic link to the system's UPX
-        ln -sf $(which upx) staging_dir/host/bin/upx
-        # Verify the setup
-        ls -l staging_dir/host/bin/upx
-        staging_dir/host/bin/upx --version
+
+        mkdir -p openwrt/staging_dir/host/bin
+        ln -sf $(which upx) openwrt/staging_dir/host/bin/upx
+
+        ls -l openwrt/staging_dir/host/bin/upx
+        openwrt/staging_dir/host/bin/upx --version
         
     - name: Clone source code
       working-directory: /workdir
