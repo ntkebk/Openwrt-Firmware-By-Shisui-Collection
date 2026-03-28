@@ -53,17 +53,6 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
         
         
-    - name: Fix UPX Path for Xray-core
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y upx-ucl
-
-        mkdir -p openwrt/staging_dir/host/bin
-        ln -sf $(which upx) openwrt/staging_dir/host/bin/upx
-
-        ls -l openwrt/staging_dir/host/bin/upx
-        openwrt/staging_dir/host/bin/upx --version
-        
     - name: Clone source code
       working-directory: /workdir
       run: |
