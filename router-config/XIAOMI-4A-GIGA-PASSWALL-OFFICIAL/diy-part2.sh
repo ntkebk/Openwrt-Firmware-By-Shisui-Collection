@@ -52,4 +52,6 @@ sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.8.24/g' feeds/passwall_pkg/xray-core/Ma
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=skip/g' feeds/passwall_pkg/xray-core/Makefile
 
 # Force the Makefile to use Go 1.23 to match the build system.
-sed -i 's/GO_PKG_GO_VERSION:=.*/GO_PKG_GO_VERSION:=1.23/g' feeds/passwall_pkg/xray-core/Makefile
+# sed -i 's/GO_PKG_GO_VERSION:=.*/GO_PKG_GO_VERSION:=1.23/g' feeds/passwall_pkg/xray-core/Makefile
+sed -i '/$(Build\/Patch)/a \	sed -i "s/go 1.21.4/go 1.23/g" $(PKG_BUILD_DIR)/go.mod' Makefile
+popd
