@@ -50,3 +50,6 @@ sed -i 's/CONFIG_PACKAGE_luci-app-3ginfo-lite=y/# CONFIG_PACKAGE_luci-app-3ginfo
 # Force the use of a version of Xray-core that compiles successfully on older Go versions.
 sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.8.24/g' feeds/passwall_pkg/xray-core/Makefile
 sed -i 's/PKG_HASH:=.*/PKG_HASH:=skip/g' feeds/passwall_pkg/xray-core/Makefile
+
+# Force the Makefile to use Go 1.23 to match the build system.
+sed -i 's/GO_PKG_GO_VERSION:=.*/GO_PKG_GO_VERSION:=1.23/g' feeds/passwall_pkg/xray-core/Makefile
