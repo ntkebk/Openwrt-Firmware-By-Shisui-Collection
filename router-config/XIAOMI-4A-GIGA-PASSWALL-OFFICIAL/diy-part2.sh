@@ -27,3 +27,12 @@ sed -i '/CONFIG_PACKAGE_odhcpd-ipv6only/d' .config
 sed -i '/CONFIG_PACKAGE_unzip/d' .config
 sed -i '/CONFIG_PACKAGE_tcping/d' .config
 sed -i '/CONFIG_PACKAGE_coreutils-base64/d' .config
+
+# 4. --------------------------------------------
+echo "CONFIG_PACKAGE_luci-app-passwall=y" >> .config
+echo "CONFIG_PACKAGE_luci-i18n-passwall-en=y" >> .config
+echo "CONFIG_PACKAGE_xray-core=y" >> .config
+
+# 5. ---------------------------------------------
+echo "# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray-core is not set" >> .config
+echo "# CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan-go is not set" >> .config
