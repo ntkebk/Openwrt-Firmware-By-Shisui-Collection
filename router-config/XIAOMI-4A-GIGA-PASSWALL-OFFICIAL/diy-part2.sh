@@ -37,3 +37,7 @@ echo "CONFIG_PACKAGE_xray-core=y" >> .config
 echo "CONFIG_PACKAGE_luci-app-firewall4=y" >> .config
 echo "CONFIG_PACKAGE_kmod-nft-tproxy=y" >> .config
 echo "CONFIG_PACKAGE_kmod-nft-socket=y" >> .config
+
+# Compress Xray files to save space (ensure the build system has upx)
+# If using common scripts on GitHub Actions, upx is usually already included.
+sed -i '/^define Package\/xray-core\/install/,/^endef/ s/$(1)\/usr\/bin\/xray/$(1)\/usr\/bin\/xray; upx --lzma --best $(1)\/usr\/bin\/xray/' feeds/passwall_pkg/xray-core/Makefile || true
