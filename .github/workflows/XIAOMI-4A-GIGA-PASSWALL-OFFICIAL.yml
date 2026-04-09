@@ -17,7 +17,7 @@ on:
 
 env:
   REPO_URL: https://git.openwrt.org/openwrt/openwrt.git
-  REPO_BRANCH: openwrt-21.02
+  REPO_BRANCH: openwrt-23.05
   FEEDS_CONF: router-config/XIAOMI-4A-GIGA-PASSWALL-OFFICIAL/feeds.conf.default
   CONFIG_FILE: router-config/XIAOMI-4A-GIGA-PASSWALL-OFFICIAL/1.config
   DIY_P1_SH: router-config/XIAOMI-4A-GIGA-PASSWALL-OFFICIAL/diy-part1.sh
