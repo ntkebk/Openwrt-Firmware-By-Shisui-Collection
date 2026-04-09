@@ -1,43 +1,25 @@
 #!/bin/bash
 
-# 1. 移除 SNAPSHOT 标签 
-sed -i 's/-SNAPSHOT//g' include/version.mk
-sed -i 's/-SNAPSHOT//g' package/base-files/image-config.in
+# 1. Modify the Makefile (Xray compression) - This needs to be fixed in the source code.
+sed -i 's/PKG_VERSION:=.*/PKG_VERSION:=1.8.4/g' feeds/passwall_pkg/xray-core/Makefile
+sed -i 's/PKG_HASH:=.*/PKG_HASH:=skip/g' feeds/passwall_pkg/xray-core/Makefile
 
-# 2. Add an additional app.
-git clone https://github.com/MatJehey/autocore-arm-x86.git package/new/luci-app-autocore
-git clone https://github.com/4IceG/luci-app-3ginfo-lite.git package/new/luci-app-3ginfo-lite
+# Compress X-rays using UPX (a powerful tool for reducing file size)
+sed -i '/^define Package\/xray-core\/install/,/^endef/ s/$(1)\/usr\/bin\/xray/$(1)\/usr\/bin\/xray; upx --lzma --best $(1)\/usr\/bin\/xray/' feeds/passwall_pkg/xray-core/Makefile || true
 
-# 3. Manage IPv6 radically (add the odhcp6c remover to reclaim space).
-sed -i 's/CONFIG_IPV6=y/# CONFIG_IPV6 is not set/g' .config
-sed -i '/ip6tables/d' .config
-sed -i '/odhcpd-ipv6only/d' .config
-sed -i '/odhcp6c/d' .config
-
-# 4. Remove space-consuming packages (add Coreutils and clean up redundant iptables)
-# Remove Coreutils (use Busybox instead, which is sufficient for general use and much smaller)
+# 2. Edit the configuration file (it must be a .config file because the .yml file has already been affected by `mv`.
+# Delete items that are taking up too much space.
 sed -i '/CONFIG_PACKAGE_coreutils/d' .config
-
-# Delete old proxy versions and unused tools.
-sed -i '/CONFIG_PACKAGE_kcptun/d' .config
-sed -i '/CONFIG_PACKAGE_simple-obfs/d' .config
 sed -i '/CONFIG_PACKAGE_unzip/d' .config
 sed -i '/CONFIG_PACKAGE_tcping/d' .config
+sed -i '/CONFIG_PACKAGE_simple-obfs/d' .config
 
-# Delete remnants of iptables (since version 23.05 primarily uses fw4/nftables)
+# Delete IPv6 and iptables remnants.
+sed -i '/odhcp6c/d' .config
+sed -i '/odhcpd-ipv6only/d' .config
 sed -i '/CONFIG_PACKAGE_iptables/d' .config
 sed -i '/CONFIG_PACKAGE_kmod-ipt/d' .config
-sed -i '/CONFIG_PACKAGE_kmod-nf-ipt/d' .config
 
-#5. Mandatory selection of PassWall and Firewall4 (maintained and with added Thai language support in case you need it).
-echo "CONFIG_PACKAGE_luci-app-passwall=y" >> .config
-echo "CONFIG_PACKAGE_luci-i18n-passwall-en=y" >> .config
-# echo "CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=n" >> .config # Turn off Chinese language if it's enabled.
-echo "CONFIG_PACKAGE_xray-core=y" >> .config
+# 3. Force the addition of necessary values ​​for OpenWrt 23.05.
 echo "CONFIG_PACKAGE_luci-app-firewall4=y" >> .config
 echo "CONFIG_PACKAGE_kmod-nft-tproxy=y" >> .config
-echo "CONFIG_PACKAGE_kmod-nft-socket=y" >> .config
-
-# Compress Xray files to save space (ensure the build system has upx)
-# If using common scripts on GitHub Actions, upx is usually already included.
-sed -i '/^define Package\/xray-core\/install/,/^endef/ s/$(1)\/usr\/bin\/xray/$(1)\/usr\/bin\/xray; upx --lzma --best $(1)\/usr\/bin\/xray/' feeds/passwall_pkg/xray-core/Makefile || true
